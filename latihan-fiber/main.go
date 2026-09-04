@@ -15,5 +15,12 @@ app.Get("/api/info", func(c fiber.Ctx) error {
 		"status": "berjalan",
 	})
 })
+app.Get("/api/mahasiswa", func(c fiber.Ctx) error {
+	return c.JSON(fiber.Map{
+		"NAMA": "MUHAMMAD IMAM SALAFUDIN",
+		"NIM": "H1H024067",
+		"PROGRAM STUDI": "TEKNIK KOMPUTER",
+	})
+})
 	log.Fatal(app.Listen(":3000"))
 }
