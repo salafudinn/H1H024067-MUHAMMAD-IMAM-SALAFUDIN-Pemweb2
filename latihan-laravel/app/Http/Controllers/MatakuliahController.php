@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class MatakuliahController extends Controller
 {
-    // Data dummy array minimal 5 matakuliah
     private $matakuliah = [
         ['kode' => 'MK001', 'nama' => 'Pemrograman Web', 'sks' => 3],
         ['kode' => 'MK002', 'nama' => 'Struktur Data', 'sks' => 4],
@@ -17,28 +16,38 @@ class MatakuliahController extends Controller
 
     public function index(Request $request)
     {
+        $search = $request->query('q', '');
         $data = $this->matakuliah;
-        
-        // Fitur pencarian sederhana dari query string
-        $search = $request->query('search');
-        if ($search) {
-            $data = array_filter($data, function($item) use ($search) {
-                return stripos($item['nama'], $search) !== false;
+
+        if (!empty($search)) {
+            $data = array_filter($this->matakuliah, function ($item) use ($search) {
+                return stripos($item['nama'], $search) !== false || stripos($item['kode'], $search) !== false;
             });
         }
 
-        return view('matakuliah.index', ['matakuliah' => $data, 'search' => $search]);
+        return view('matakuliah.index', [
+            'daftarMatakuliah' => $data,
+            'katakunci' => $search
+        ]);
     }
 
-    public function show($kode)
+    public function show(string $kode)
     {
-        // Mencari matakuliah berdasarkan kode
-        $mk = collect($this->matakuliah)->firstWhere('kode', $kode);
-        
+        $mk = null;
+        foreach ($this->matakuliah as $item) {
+            if ($item['kode'] === $kode) {
+                $mk = $item;
+                break;
+            }
+        }
+
         if (!$mk) {
             abort(404);
         }
 
-        return view('matakuliah.show', ['mk' => $mk]);
+        return view('matakuliah.show', [
+            'matakuliah' => $mk,
+            'kode' => $kode
+        ]);
     }
 }
