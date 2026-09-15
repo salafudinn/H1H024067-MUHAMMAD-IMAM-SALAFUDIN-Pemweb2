@@ -5,7 +5,7 @@ use App\Http\Controllers\MatakuliahController;
 use App\Http\Controllers\MahasiswaWebController;
 
 Route::get('/', function () {
-    return redirect()->route('mahasiswa.index');
+    return view('welcome');
 });
 
 Route::get('/salam', function () {

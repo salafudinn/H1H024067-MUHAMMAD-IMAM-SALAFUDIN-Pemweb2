@@ -18,7 +18,7 @@ return new class extends Migration
     $table->string('jenjang', 10);
     $table->timestamps();
     });
-    }   
+    }
     /**
      * Reverse the migrations.
      */
