@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-
+use App\Models\Mahasiswa;
 class MahasiswaController extends Controller
 {
     public function index()
@@ -15,9 +15,11 @@ class MahasiswaController extends Controller
         return view('mahasiswa.index', ['daftarMahasiswa' => $daftarMahasiswa]);
     }
 
-    public function show(string $nim)
+    public function show(Mahasiswa $mahasiswa)
     {
-        return view('mahasiswa.show', ['nim' => $nim]);
+        $mahasiswa->load('programStudi', 'matakuliah');
+    
+        return view('mahasiswa.detail', ['mahasiswa' => $mahasiswa]);
     }
 
     public function cari(Request $request)  {

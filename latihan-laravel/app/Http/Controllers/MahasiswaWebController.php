@@ -53,11 +53,24 @@ class MahasiswaWebController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Mahasiswa $mahasiswa)
     {
-        //
+        $mahasiswa->load('programStudi', 'matakuliah');
+    
+        return view('mahasiswa.detail', ['mahasiswa' => $mahasiswa]);
     }
 
+    public function topIpk()
+    {
+        $daftarMahasiswa = Mahasiswa::whereHas('programStudi', function ($query) {
+            $query->where('kode', 'TK');
+        })
+            ->orderBy('ipk', 'desc')
+            ->take(10)
+            ->get();
+    
+        return view('mahasiswa.top-ipk', ['daftarMahasiswa' => $daftarMahasiswa]);
+    }
     /**
      * Show the form for editing the specified resource.
      */
