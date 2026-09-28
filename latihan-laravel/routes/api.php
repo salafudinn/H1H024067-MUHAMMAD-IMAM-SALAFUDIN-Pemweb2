@@ -1,5 +1,7 @@
 <?php
 use App\Http\Controllers\Api\MahasiswaController;
+use App\Http\Controllers\Api\MatakuliahController;
+use App\Http\Controllers\Api\ProgramStudiController;
 use Illuminate\Support\Facades\Route;
 Route::get('/status', function () {
  return response()->json([
@@ -9,3 +11,6 @@ Route::get('/status', function () {
  ]);
 });
 Route::apiResource('mahasiswa', MahasiswaController::class);
+Route::apiResource('matakuliah', MatakuliahController::class);
+Route::get('program-studi/{id}/mahasiswa', [ProgramStudiController::class, 'mahasiswa']);
+

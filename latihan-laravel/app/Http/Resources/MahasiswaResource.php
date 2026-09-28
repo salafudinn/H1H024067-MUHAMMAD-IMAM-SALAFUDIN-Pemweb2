@@ -25,7 +25,7 @@ class MahasiswaResource extends JsonResource
     'nama' => $this->programStudi->nama,
     ];
     }),
-    'dibuat_pada' => $this->created_at->toIso8601String(),
+    'dibuat_pada' => $this->created_at ? $this->created_at->toIso8601String() : null,
     ];
     }
 }

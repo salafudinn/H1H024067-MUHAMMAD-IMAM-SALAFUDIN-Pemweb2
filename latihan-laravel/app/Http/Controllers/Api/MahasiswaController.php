@@ -42,6 +42,15 @@ class MahasiswaController extends Controller
             $kueri->orderBy($urutan, $arah === 'desc' ? 'desc' : 'asc');
         }
 
+        if ($request->has('fields')) {
+            $fields = array_map('trim', explode(',', $request->query('fields')));
+            $allowedFields = ['id', 'nama', 'nim', 'angkatan', 'ipk', 'program_studi_id']; 
+            $safeFields = array_intersect($fields, $allowedFields);
+            if (!empty($safeFields)) {
+                $kueri->select($safeFields);
+            }
+        }
+
         $perHalaman = min($request->integer('per_halaman', 10), 100);
 
         return MahasiswaResource::collection($kueri->paginate($perHalaman));
