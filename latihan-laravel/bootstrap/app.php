@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Auth\AuthenticationException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,7 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+            'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+        ]);
     })
 ->withExceptions(function (Exceptions $exceptions) {
     $exceptions->render(function (NotFoundHttpException $e, Request $request) {
@@ -34,6 +38,15 @@ return Application::configure(basePath: dirname(__DIR__))
                 'pesan'  => 'Data yang dikirim tidak valid',
                 'galat'  => $e->errors(),
             ], 422);
+        }
+    });
+
+    $exceptions->render(function (AuthenticationException $e, Request $request) {
+        if ($request->is('api/*')) {
+            return response()->json([
+                'sukses' => false,
+                'pesan'  => 'Token tidak valid atau belum dikirim',
+            ], 401);
         }
     });
 })->create();
