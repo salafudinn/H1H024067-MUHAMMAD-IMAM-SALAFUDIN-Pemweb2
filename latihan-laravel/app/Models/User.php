@@ -29,6 +29,11 @@ class User extends Authenticatable
         'password',
         'peran',
     ];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'terakhir_login' => 'datetime',
+    ];
 
     protected function casts(): array
     {

@@ -43,6 +43,7 @@ class AuthController extends Controller
 
     public function login(Request $request): JsonResponse
     {
+
         $data = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
@@ -56,6 +57,8 @@ class AuthController extends Controller
                 'pesan' => 'Email atau kata sandi tidak sesuai',
             ], 401);
         }
+        $pengguna->terakhir_login = now();
+        $pengguna->save();
 
         $kemampuan = $pengguna->peran === 'admin'
             ? ['mahasiswa:baca', 'mahasiswa:tulis']
@@ -113,4 +116,29 @@ class AuthController extends Controller
             'pesan' => 'Seluruh sesi perangkat telah diakhiri',
         ]);
     }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'kata_sandi_lama' => 'required',
+            'kata_sandi_baru' => 'required|min:8|confirmed',
+        ]);
+
+        $user = $request->user();
+
+        // Verifikasi kata sandi lama
+        if (!Hash::check($request->kata_sandi_lama, $user->password)) {
+            return response()->json([
+                'pesan' => 'Kata sandi lama tidak sesuai.',
+            ], 400); // 400 Bad Request
+        }
+
+        // Perbarui dengan kata sandi baru
+        $user->password = Hash::make($request->kata_sandi_baru);
+        $user->save();
+
+        return response()->json([
+            'pesan' => 'Kata sandi berhasil diperbarui.',
+        ]);
+    }
+
 }

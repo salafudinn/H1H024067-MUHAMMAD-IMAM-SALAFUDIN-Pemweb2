@@ -30,3 +30,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/mahasiswa/{mahasiswa}', [MahasiswaController::class, 'destroy']);
     });
 });
+
+Route::put('/auth/password', [AuthController::class, 'updatePassword']);
