@@ -9,6 +9,7 @@ type Konfigurasi struct {
     NamaAplikasi string
     Port         string
     Lingkungan   string
+    ApiKey       string
 }
 
 func Muat() Konfigurasi {
@@ -17,6 +18,7 @@ func Muat() Konfigurasi {
         NamaAplikasi: ambil("APP_NAME", "Fiber API"),
         Port:         ambil("APP_PORT", "3000"),
         Lingkungan:   ambil("APP_ENV", "local"),
+        ApiKey:       ambil("API_KEY", "rahasia123"),
     }
 }
 

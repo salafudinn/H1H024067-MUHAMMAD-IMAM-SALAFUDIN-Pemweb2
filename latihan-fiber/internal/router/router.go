@@ -18,4 +18,6 @@ func Daftarkan(app *fiber.App) {
     mahasiswa := api.Group("/mahasiswa")
     mahasiswa.Get("/", handler.DaftarMahasiswa)
     mahasiswa.Get("/:id", handler.DetailMahasiswa)
+    mahasiswa.Get("/nim/:nim", handler.DetailMahasiswaByNIM)
+	
 }

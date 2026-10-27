@@ -54,3 +54,13 @@ func penanganGalat(c fiber.Ctx, err error) error {
         "pesan":  pesan,
     })
 }
+
+// Di internal/router/router.go
+func Daftarkan(app *fiber.App, apiKey string) {
+    api := app.Group("/api")
+
+    // Pasang Middleware KunciApi di rute /api
+    api.Use(middleware.KunciApi(apiKey))
+
+    // ... rute lainnya
+}
